@@ -22,4 +22,4 @@ if [ -f "$RSYNC/exclude" ];then
 fi
 
 CMD="rsync $CONFIG $EXCLUDE $ROOT/ $REMOTE/"
-$CMD
+$CMD $@

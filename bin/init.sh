@@ -1,5 +1,5 @@
 #!/bin/bash
-#i:Create an empty Rgit repository or reinitialize an existing one
+#i:Create an empty RGit repository or reinitialize an existing one
 #u:Usage: rgit init <remote>
 
 REMOTE=$1
@@ -18,11 +18,11 @@ fi
 
 mkdir "$RSYNC"
 echo "$REMOTE" > $RSYNC/remote
-echo "-a -v -zz" > $RSYNC/config
+echo "-a -v -zz --delete" > $RSYNC/config
 
 echo ".git" > $RSYNC/exclude
 if [[ -f "$CURRENT/.gitignore" && "$(sed -n '/.rsync/'p $CURRENT/.gitignore)" = "" ]];then
     echo ".rsync" >> $CURRENT/.gitignore
 fi
 
-echo "Initialized empty Git repository in $RSYNC"
+echo "Initialized empty RGit repository in $RSYNC"

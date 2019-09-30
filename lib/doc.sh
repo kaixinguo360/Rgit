@@ -17,4 +17,4 @@ do
 done < $FILE
 
 [ "$NUM" = 0 ] && exit 1
-exit
+exit 0
