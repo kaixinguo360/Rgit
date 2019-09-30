@@ -10,11 +10,19 @@ if [ "$REMOTE" = "" ];then
     exit 1
 fi
 
-RSYNC_DIR=$CURRENT/.rsync
-if [ -d "$RSYNC_DIR" ];then
+RSYNC=$CURRENT/.rsync
+if [ -d "$RSYNC" ];then
     echo "rgit: cannot create directory ‘.rsync’: File exists"
     exit 1
 fi
 
-mkdir "$RSYNC_DIR"
-echo "$REMOTE" > $RSYNC_DIR/remote
+mkdir "$RSYNC"
+echo "$REMOTE" > $RSYNC/remote
+echo "-a -v -zz" > $RSYNC/config
+
+echo ".git" > $RSYNC/exclude
+if [[ -f "$CURRENT/.gitignore" && "$(sed -n '/.rsync/'p $CURRENT/.gitignore)" = "" ]];then
+    echo ".rsync" >> $CURRENT/.gitignore
+fi
+
+echo "Initialized empty Git repository in $RSYNC"
