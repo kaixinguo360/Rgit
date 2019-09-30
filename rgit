@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Get $CURRENT
+CURRENT=$(realpath $(pwd))
+cd $(dirname $(realpath $0))
+
+# Get $CMD
+CMD=$1
+shift
+
+# Check $CMD
+if [ "$CMD" = "" ];then
+    CMD='help'
+fi
+if [[ "$CMD" = "--help" || "$CMD" = "-h" ]];then
+    CMD='help'
+fi
+if [ ! -f "bin/$CMD.sh" ];then
+    echo "rgit: '$CMD' is not a rgit command. See '${0##*/} --help'.">&2
+    exit 1
+fi
+
+# Run $CMD
+CURRENT=$CURRENT bin/$CMD.sh $@
