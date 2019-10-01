@@ -2,24 +2,19 @@
 #i:Update remote refs along with associated objects
 #u:Usage: rgit push
 
-ROOT=$(traverse $CURRENT)
-R=$?;[ $R != 0 ]&&exit $R
-
+ROOT=$(traverse $CURRENT) || exit
 RSYNC=$ROOT/.rsync
 
-REMOTE=$(cat $RSYNC/remote) || exit 1
-CONFIG=$(cat $RSYNC/config) || exit 1
+REMOTE=$(cat $RSYNC/remote) || exit
+CONFIG=$(cat $RSYNC/config) || exit
 
 EXCLUDE="--exclude=.rsync"
 if [ -f "$RSYNC/exclude" ];then
-    while read LINE
-    do
-        LINE=${LINE##* }
-        if [[ "$LINE" != "" && "${LINE:0:1}" != "#" ]];then
-            EXCLUDE="--exclude=$LINE "$EXCLUDE
-        fi
-    done < $RSYNC/exclude
+    EXCLUDE="--exclude-from=$RSYNC/exclude "$EXCLUDE
 fi
 
-CMD="rsync $CONFIG $EXCLUDE $ROOT/ $REMOTE/"
-$CMD $@
+BACKUP_PATH=.rsync/backup/$(date '+%Y/%m/%d/%H%M%S')
+BACKUP="-b --backup-dir $BACKUP_PATH"
+
+CMD="rsync $@ $BACKUP $CONFIG $EXCLUDE $ROOT/ $REMOTE/"
+$CMD

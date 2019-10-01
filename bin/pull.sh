@@ -2,24 +2,19 @@
 #i:Fetch from and integrate with another repository or a local branch
 #u:Usage: rgit pull
 
-ROOT=$(traverse $CURRENT)
-R=$?;[ $R != 0 ]&&exit $R
-
+ROOT=$(traverse $CURRENT) || exit
 RSYNC=$ROOT/.rsync
 
-REMOTE=$(cat $RSYNC/remote) || exit 1
-CONFIG=$(cat $RSYNC/config) || exit 1
+REMOTE=$(cat $RSYNC/remote) || exit
+CONFIG=$(cat $RSYNC/config) || exit
 
 EXCLUDE="--exclude=.rsync"
 if [ -f "$RSYNC/exclude" ];then
-    while read LINE
-    do
-        LINE=${LINE##* }
-        if [[ "$LINE" != "" && "${LINE:0:1}" != "#" ]];then
-            EXCLUDE="--exclude=$LINE "$EXCLUDE
-        fi
-    done < $RSYNC/exclude
+    EXCLUDE="--exclude-from=$RSYNC/exclude "$EXCLUDE
 fi
 
-CMD="rsync $CONFIG $EXCLUDE $REMOTE/ $ROOT/"
-$CMD $@
+BACKUP_PATH=$RSYNC/backup/$(date '+%Y/%m/%d/%H%M%S')
+BACKUP="-b --backup-dir $BACKUP_PATH"
+
+CMD="rsync $@ $BACKUP $CONFIG $EXCLUDE $REMOTE/ $ROOT/"
+$CMD
