@@ -4,7 +4,7 @@
 
 CMD=$1
 
-cd $(dirname $0)
+cd bin
 if [ "$CMD" = "" ];then # if
 
 cat <<HERE
@@ -17,7 +17,7 @@ HERE
 for FILE in $(ls -1)
 do
     echo -en '   '${FILE%%.*}'\n'
-    ../lib/doc.sh $FILE i|awk '{print "         "$0}'
+    doc $FILE i|awk '{print "         "$0}'
 done
 
 cat <<HERE
@@ -32,9 +32,9 @@ if [ ! -f "$CMD.sh" ];then
     exit 1
 fi
 
-../lib/doc.sh $CMD.sh u && echo
-../lib/doc.sh $CMD.sh i && echo
-../lib/doc.sh $CMD.sh f && echo
+doc $CMD.sh u && echo
+doc $CMD.sh i && echo
+doc $CMD.sh f && echo
 echo "Rsync Git, version 0.0.1"
 
 fi #fi

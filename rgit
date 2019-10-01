@@ -2,23 +2,32 @@
 
 # Get $CURRENT
 CURRENT=$(realpath $(pwd))
-cd $(dirname $(realpath $0))
 
-# Get $CMD
-CMD=$1
+# Get $RGIT_ROOT
+RGIT_ROOT=$(dirname $(realpath $0))
+cd $RGIT_ROOT
+
+# Get $RGIT_CMD
+RGIT_CMD=$1
 shift
 
-# Check $CMD
-if [ "$CMD" = "" ];then
-    CMD='help'
+# Check $RGIT_CMD
+if [ "$RGIT_CMD" = "" ];then
+    RGIT_CMD='help'
 fi
-if [[ "$CMD" = "--help" || "$CMD" = "-h" ]];then
-    CMD='help'
+if [[ "$RGIT_CMD" = "--help" || "$RGIT_CMD" = "-h" ]];then
+    RGIT_CMD='help'
 fi
-if [ ! -f "bin/$CMD.sh" ];then
-    echo "rgit: '$CMD' is not a rgit command. See '${0##*/} --help'.">&2
+if [ ! -f "bin/$RGIT_CMD.sh" ];then
+    echo "rgit: '$RGIT_CMD' is not a rgit command. See '${0##*/} --help'.">&2
     exit 1
 fi
 
-# Run $CMD
-CURRENT=$CURRENT bin/$CMD.sh $@
+# Load lib/*
+for LIB in $(ls -1 lib)
+do
+    . lib/$LIB
+done
+
+# Run $RGIT_CMD
+. bin/$RGIT_CMD.sh $@

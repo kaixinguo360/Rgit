@@ -2,7 +2,7 @@
 #i:Fetch from and integrate with another repository or a local branch
 #u:Usage: rgit pull
 
-ROOT=$(./lib/traverse.sh $CURRENT)
+ROOT=$(traverse $CURRENT)
 R=$?;[ $R != 0 ]&&exit $R
 
 RSYNC=$ROOT/.rsync

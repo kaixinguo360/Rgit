@@ -2,7 +2,7 @@
 #i:Update remote refs along with associated objects
 #u:Usage: rgit push
 
-ROOT=$(./lib/traverse.sh $CURRENT)
+ROOT=$(traverse $CURRENT)
 R=$?;[ $R != 0 ]&&exit $R
 
 RSYNC=$ROOT/.rsync

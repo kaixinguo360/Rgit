@@ -5,8 +5,7 @@
 REMOTE=$1
 if [ "$REMOTE" = "" ];then
     echo "rgit: missing operand"
-    lib/doc.sh $0 u
-    lib/doc.sh $0 f
+    print_help
     exit 1
 fi
 
