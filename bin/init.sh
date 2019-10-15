@@ -24,4 +24,14 @@ if [[ -f "$CURRENT/.gitignore" && "$(sed -n '/.rsync/'p $CURRENT/.gitignore)" = 
     echo ".rsync" >> $CURRENT/.gitignore
 fi
 
+mkdir "$RSYNC/hooks"
+touch "$RSYNC/hooks/pre-push.sample"
+touch "$RSYNC/hooks/post-push.sample"
+touch "$RSYNC/hooks/pre-pull.sample"
+touch "$RSYNC/hooks/post-pull.sample"
+touch "$RSYNC/hooks/pre-push-remote.sample"
+touch "$RSYNC/hooks/post-push-remote.sample"
+touch "$RSYNC/hooks/pre-pull-remote.sample"
+touch "$RSYNC/hooks/post-pull-remote.sample"
+
 echo "Initialized empty RGit repository in $RSYNC"
