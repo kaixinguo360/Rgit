@@ -36,3 +36,4 @@ cd $ROOT
 $CMD||exit
 [ -n "$POST_CMD" ] && { bash -ic "$POST_CMD"||exit; }
 [ -n "$POST_REMOTE_CMD" ] && { $RGIT_ROOT/rgit run $POST_REMOTE_CMD||exit; }
+exit 0

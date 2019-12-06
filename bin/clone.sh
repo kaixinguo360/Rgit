@@ -30,7 +30,7 @@ fi
 cd $RGIT_ROOT
 
 # Check Target Directory
-if [ -d "$DIR" ];then
+if [[ -d "$DIR" && "$(ls -A $DIR|wc -w)" != 0 ]];then
     echo "fatal: destination path '$DIR' already exists and is not an empty directory."
     exit 1
 else
