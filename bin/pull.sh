@@ -13,6 +13,24 @@ if [ -f "$RSYNC/exclude" ];then
     EXCLUDE="--exclude-from=$RSYNC/exclude $EXCLUDE"
 fi
 
+REMOTE_NAME="$1"
+shift
+
+if [ -n "$REMOTE_NAME" -a "$REMOTE_NAME" != '-' ]; then
+    if [ -e "$RSYNC/remotes/$REMOTE_NAME/remote" ]; then
+        REMOTE="$(cat $RSYNC/remotes/$REMOTE_NAME/remote)" || exit
+    else
+        printf "error: remote name '%s' does not match any.\nerror: failed to push data to '%s'\n" "$REMOTE_NAME" "$REMOTE_NAME"
+        exit
+    fi
+    if [ -e "$RSYNC/remotes/$REMOTE_NAME/config" ]; then
+        CONFIG="$(cat $RSYNC/remotes/$REMOTE_NAME/config)" || exit
+    fi
+    if [ -e "$RSYNC/remotes/$REMOTE_NAME/exclude" ]; then
+        EXCLUDE="--exclude-from=$RSYNC/remotes/$REMOTE_NAME/exclude --exclude=.rsync" || exit
+    fi
+fi
+
 BACKUP_PATH="$RSYNC/backup/$(date '+%Y/%m/%d/%H%M%S')"
 BACKUP="-b --backup-dir $BACKUP_PATH"
 
